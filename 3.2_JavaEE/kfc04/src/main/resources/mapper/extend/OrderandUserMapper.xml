@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.briup.kfc.mapper.extend.OrderUser">
+<!--  namespace对应接口-->
+
+  <select id="orderanduser" resultMap="orderanduserExtendResultMap">
+    select * from kfc_order;
+  </select>
+  <resultMap
+          id="orderanduserExtendResultMap"
+          extends="com.briup.kfc.mapper.OrderMapper.BaseResultMap"
+          type="com.briup.kfc.bean.extend.OrderandUser">
+    <association
+            property="user"
+            column="user_id"
+            select="com.briup.kfc.mapper.UserMapper.selectByPrimaryKey">
+    </association>
+  </resultMap>
+
+</mapper>

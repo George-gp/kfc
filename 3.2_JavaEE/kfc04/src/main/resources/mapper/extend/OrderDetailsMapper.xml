@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.briup.kfc.mapper.OrderOlineMapper">
+
+
+
+  <select id="findById" resultMap="everythingoforder">
+    select * from kfc_orderline  where id = #{id}
+  </select>
+
+  <resultMap type="com.briup.kfc.bean.extend.OrderDetails"
+             extends="com.briup.kfc.mapper.OrderOlineMapper.BaseResultMap"
+             id="everythingoforder"
+            >
+
+    <association
+            property="order"
+            column="order_id"
+            javaType="com.briup.kfc.bean.Order"
+            select="com.briup.kfc.mapper.OrderMapper.selectByPrimaryKey" ></association>
+
+
+    <association
+            property="product"
+            column="product_id"
+            javaType="com.briup.kfc.bean.Product"
+            select="com.briup.kfc.mapper.ProductMapper.selectByPrimaryKey"></association>
+  </resultMap>
+
+
+
+
+
+
+
+
+  <select id="findAllDetails" resultMap="every">
+
+/*   select s.id,s.order_id from kfc_orderline as s
+*/
+ select
+    o.id,
+    o.num,
+    o.order_id,
+    o.product_id,
+
+    o.id as o_id,
+    o.num as o_num,
+    ord.id as ord_id,
+    u.id as u_id,
+    u.name as u_name,
+    p.name as p_name,
+    p.status as p_status,
+    p.price as p_price,
+    p.id as product_id
+
+    from kfc_orderline as o,kfc_user as u,kfc_product as p ,kfc_order as ord
+    where o.order_id=ord.id and o.product_id=p.id and ord.user_id=u.id
+
+  </select>
+
+  <resultMap type="com.briup.kfc.bean.extend.OnlineDetails"
+             extends="com.briup.kfc.mapper.OrderOlineMapper.BaseResultMap"
+             id="every">
+    <association property="user"
+                 javaType="com.briup.kfc.bean.User">
+      <id column="u_id" property="id"/>
+      <result column="u_name" property="name"/>
+    </association>
+
+
+    <association
+            property="product"
+            javaType="com.briup.kfc.bean.Product">
+    <id column="p_id" property="id"/>
+      <result column="p_name" property="name"/>
+      <result column="p_status" property="status"/>
+      <result column="p_price" property="price"/>
+  </association>
+
+    <association property="order"
+                 javaType="com.briup.kfc.bean.Order">
+      <id column="ord_id" property="id"/>
+      <id column="u_id" property="userId"/>
+
+    </association>
+
+
+  </resultMap>
+
+
+
+
+
+
+</mapper>
